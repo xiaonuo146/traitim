@@ -47,7 +47,12 @@ screen and (max-width: 900px) and (orientation: portrait) {
         left: 0 !important;
         width: 100vw !important;
         height: 100dvh !important;
-        display: block !important;
+
+        z-index: 10 !important;
+        opacity: 1 !important;
+        /* <--- PHẢI CÓ DÒNG NÀY ĐỂ HIỆN CHỮ */
+        visibility: visible !important;
+        /* <--- BẢO ĐẢM NHÌN THẤY 100% */
         pointer-events: none;
     }
 }
@@ -55,7 +60,7 @@ screen and (max-width: 900px) and (orientation: portrait) {
 /* ==========================================================
    2. UI NGANG CHUẨN (CHO MÁY TÍNH & ĐIỆN THOẠI XOAY NGANG)
 ========================================================== */
-canvas {
+#canvas {
     position: fixed;
     top: 0;
     left: 0;
