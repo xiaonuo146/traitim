@@ -1,4 +1,4 @@
-#3D Romantic Particle Heart — Three.js
+# 3D Romantic Particle Heart — Three.js
 
 Một dự án Creative Coding tương tác 3D kết hợp nghệ thuật hạt ánh sáng (Particle Art), hoạt ảnh điện ảnh và âm nhạc lãng mạn được xây dựng trên nền tảng **Three.js** và **WebGL**.
 
@@ -68,33 +68,34 @@ traitim
 │   └── main.js            # Khởi tạo Three.js, xử lý media và cụm điều khiển
 ├── index.html             # Cấu trúc trang web & nạp font chữ
 └── README.md              # Tài liệu dự án
-4. Hướng dẫn tải về & Chạy trên máy (Local Setup)
+
+## 4. Hướng dẫn tải về & Chạy trên máy (Local Setup)
 Do dự án sử dụng JavaScript ES Modules (import/export) và nạp file media cục bộ, trình duyệt yêu cầu chạy qua một web server nội bộ (không mở trực tiếp bằng cách nhấp đúp file index.html vì sẽ bị chặn lỗi CORS).
-Bước 1: Clone dự án về máy qua Git
+ ##### Bước 1: Clone dự án về máy qua Git
 Mở Terminal / Command Prompt và gõ lệnh:
 code
 Bash
 git clone https://github.com/<tai-khoan-cua-ban>/<ten-repository>.git
 cd <ten-repository>
-Bước 2: Khởi động Local Server (Chọn 1 trong các cách sau)
-Cách 1 (Đơn giản nhất với VS Code):
+ ##### Bước 2: Khởi động Local Server (Chọn 1 trong các cách sau)
+ #### Cách 1 (Đơn giản nhất với VS Code):
 Cài Extension Live Server trong Visual Studio Code.
 Chuột phải vào file index.html 
 →
 →
  Chọn Open with Live Server.
-Cách 2 (Dùng Python có sẵn):
+ #### Cách 2 (Dùng Python có sẵn):
 code
 Bash
 # Python 3
 python -m http.server 3000
 Sau đó mở trình duyệt truy cập: http://localhost:3000
-Cách 3 (Dùng Node.js):
+ #### Cách 3 (Dùng Node.js):
 code
 Bash
 npx serve
- 5. Xem Video Demo & Tải Video về
- Cách 1: Xem trực tiếp trên Web (Khuyên dùng)
+## 5. Xem Video Demo & Tải Video về
+ #### Cách 1: Xem trực tiếp trên Web (Khuyên dùng)
 Bạn có thể bật tính năng GitHub Pages để bất kỳ ai cũng có thể bấm vào link xem trực tiếp dự án:
 Vào repository của bạn trên GitHub 
 →
@@ -106,16 +107,7 @@ Chọn mục Pages ở thanh menu bên trái.
 →
  bấm Save.
 Chờ 1–2 phút, GitHub sẽ cấp cho bạn một đường link công khai (ví dụ: https://<ten-tai-khoan>.github.io/<ten-repo>/) để xem online trên cả điện thoại và máy tính!
- Cách 2: Xem file Video trực tiếp trên GitHub
-Trên giao diện GitHub của repository, bấm vào thư mục assets/.
-Nhấp vào file intro.mp4.
-GitHub có sẵn trình phát video tích hợp, bạn có thể bấm Play để xem trực tiếp ngay trên trang web.
- Cách 3: Tải file Video về máy tính
-Tải qua giao diện web: Mở file assets/intro.mp4 trên GitHub 
-→
-→
- Bấm vào nút Download (hoặc nút Raw) ở góc trên bên phải để tải file về máy.
-Tải qua lệnh Git: Khi bạn chạy lệnh git clone ở Bước 4, toàn bộ video intro.mp4 và các bản nhạc đã được tự động tải về thư mục assets/ trên máy tính của bạn.
+
 ### Tùy biến nhanh (Customization)
 Chỉnh tốc độ hoạt cảnh: Mở file js/heart.js, tìm dòng const TIME_SCALE = 0.8;. Chỉnh về 1.0 để chạy tốc độ thật, hoặc 0.1 để xem chuyển động chậm.
 Chỉnh độ mờ bụi không gian: Mở file js/background.js, chỉnh thông số opacity: 0.18; tại phần PointsMaterial.
