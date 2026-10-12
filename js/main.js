@@ -168,9 +168,24 @@ class Application {
     }
 
     updateCameraDistance() {
-        const aspect = window.innerWidth / window.innerHeight;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const aspect = width / height;
         const baseZ = CONFIG.CAMERA.BASE_Z;
-        this.baseCameraZ = aspect < 1 ? baseZ / aspect : baseZ;
+
+        // THUẬT TOÁN TỰ ĐỘNG CÂN CHỈNH KHOẢNG CÁCH CAMERA CHO ĐIỆN THOẠI:
+        // Màn hình dọc (aspect < 1): Tự động lùi camera ra xa tỉ lệ nghịch với chiều ngang
+        if (aspect < 1) {
+            // Điện thoại tỷ lệ 9:16 hoặc 9:19.5 (iPhone, Samsung...)
+            this.baseCameraZ = Math.max(baseZ, (baseZ * 0.62) / aspect);
+        } else if (aspect < 1.4) {
+            // Máy tính bảng (iPad)
+            this.baseCameraZ = baseZ * (1.3 / aspect);
+        } else {
+            // Máy tính để bàn
+            this.baseCameraZ = baseZ;
+        }
+
         this.camera.position.z = this.baseCameraZ;
     }
 
