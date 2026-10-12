@@ -38,7 +38,7 @@ export class AmbientParticles {
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             transparent: true,
-            opacity: 0.45,
+            opacity: 3.0,
             sizeAttenuation: true
         });
 

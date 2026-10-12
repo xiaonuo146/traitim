@@ -4,10 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Vortex Heart - Three.js</title>
+  <title>3D Romantic Heart</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-  <!-- Nạp Three.js qua CDN dạng ES Module -->
   <script type="importmap">
       {
         "imports": {
@@ -18,7 +17,35 @@
 </head>
 
 <body>
+  <!-- 1. Màn hình bấm mở quà ban đầu (vượt qua rào cản Autoplay) -->
+  <div id="start-screen">
+    <button id="start-btn">✨ Chạm để mở sẽ có bất ngờ ✨</button>
+  </div>
+
+  <!-- 2. Video Intro mở đầu -->
+  <div id="video-container" class="hidden">
+    <video id="intro-video" playsinline preload="auto">
+      <source src="assets/intro.mp4" type="video/mp4">
+    </video>
+    <button id="skip-btn">Bỏ qua ⏭</button>
+  </div>
+
+  <!-- Nhạc 1: Dành riêng cho video clip đầu -->
+  <audio id="music-clip" preload="auto">
+    <source src="assets/music1.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Nhạc 2: Dành riêng cho Trái tim 3D (bật lặp lại loop) -->
+  <audio id="music-heart" loop preload="auto">
+    <source src="assets/music2.mp3" type="audio/mpeg">
+  </audio>
+  <div id="controls" class="hidden">
+    <button id="toggle-music-btn" title="Bật/Tắt nhạc">🔊</button>
+    <button id="toggle-anim-btn" title="Dừng/Tiếp tục hiệu ứng">⏸️</button>
+  </div>
+  <!-- 4. Canvas Trái tim 3D -->
   <canvas id="canvas"></canvas>
+
   <script type="module" src="js/main.js"></script>
 </body>
 
