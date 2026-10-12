@@ -60,7 +60,7 @@ screen and (max-width: 900px) and (orientation: portrait) {
 /* ==========================================================
    2. UI NGANG CHUẨN (CHO MÁY TÍNH & ĐIỆN THOẠI XOAY NGANG)
 ========================================================== */
-#canvas {
+canvas {
     position: fixed;
     top: 0;
     left: 0;
