@@ -240,16 +240,15 @@ window.addEventListener('DOMContentLoaded', () => {
     new Application();
 });
 // ==========================================================
-// BỘ VẼ CHỮ HẠT LẤP LÁNH (ÉP VỊ TRÍ NỔI TRÊN CÙNG - HIỆN 100%)
+// BỘ VẼ CHỮ HẠT LẤP LÁNH CHUẨN UI NGANG TRÊN NỀN ĐEN DỌC
 // ==========================================================
-class LockScreenParticleText {
-    constructor(customText = "✨ ✨ Úm ba la xì bùa, lật ngang điện thoại dính bùa dễ thương! 🪄 ❤️") {
-        this.text = customText;
+class LockScreenLandscapeParticles {
+    constructor(text = "✨ Úm ba la xì bùa, lật ngang điện thoại dính bùa dễ thương! 🪄❤️") {
+        this.text = text;
         this.particles = [];
         this.textY = 0;
-        this.speed = 1.8; // Tốc độ trôi chữ
+        this.speed = 1.8; // Tốc độ trôi từ dưới lên
 
-        // 1. TỰ TẠO VÀ ÉP VỊ TRÍ CANVAS NỔI TRÊN CÙNG MÀN HÌNH (Z-INDEX CAO NHẤT)
         let canvas = document.getElementById('lock-canvas');
         if (!canvas) {
             canvas = document.createElement('canvas');
@@ -257,9 +256,6 @@ class LockScreenParticleText {
             const container = document.getElementById('rotate-lock-screen') || document.body;
             container.appendChild(canvas);
         }
-
-        // ÉP CỨNG VỊ TRÍ PHỦ TOÀN MÀN HÌNH (KHÔNG BỊ FLEXBOX ĐẨY XUỐNG ĐÁY)
-        canvas.style.cssText = "position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100dvh !important; z-index: 9999999 !important; pointer-events: none !important;";
 
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
@@ -274,46 +270,55 @@ class LockScreenParticleText {
 
     resize() {
         if (!this.canvas) return;
-        this.width = this.canvas.width = window.innerWidth;
-        this.height = this.canvas.height = window.innerHeight;
-        // Xuất hiện ngay ở nửa dưới màn hình để thấy ngay lập tức
-        this.textY = this.height * 0.72;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+
+        // Chiều dài theo hướng ngang của UI Ngang (chính là chiều cao màn hình dọc)
+        this.landscapeWidth = Math.max(window.innerWidth, window.innerHeight);
+        this.landscapeHeight = Math.min(window.innerWidth, window.innerHeight);
+
+        // Xuất hiện ngay ở nửa dưới khung ngang
+        this.textY = this.landscapeHeight * 0.35;
         this.sampleTextParticles();
     }
 
     sampleTextParticles() {
-        if (!this.width || !this.height) return;
-
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = 1200;
-        offCanvas.height = 250;
-        const offCtx = offCanvas.getContext('2d');
+        // 1. Canvas phụ đo và vẽ chữ độ phân giải cao
+        const off = document.createElement('canvas');
+        off.width = 1600;
+        off.height = 180;
+        const offCtx = off.getContext('2d');
 
         offCtx.fillStyle = '#000000';
-        offCtx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+        offCtx.fillRect(0, 0, off.width, off.height);
 
-        offCtx.font = '900 58px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        // Font chữ to, đậm nét
+        const fSize = 46;
+        offCtx.font = `900 ${fSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+        const metrics = offCtx.measureText(this.text);
+
         offCtx.fillStyle = '#FFFFFF';
         offCtx.textAlign = 'center';
         offCtx.textBaseline = 'middle';
-        offCtx.fillText(this.text, offCanvas.width / 2, offCanvas.height / 2);
+        offCtx.fillText(this.text, off.width / 2, off.height / 2);
 
-        const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height).data;
+        const imgData = offCtx.getImageData(0, 0, off.width, off.height).data;
         this.particles = [];
 
-        // Tự co giãn theo chiều ngang màn hình (kể cả màn hình hẹp 238px trong ảnh)
-        const targetWidth = Math.min(this.width * 0.90, 380);
-        this.scale = targetWidth / (offCanvas.width * 0.70);
+        // Co dãn vừa khít 90% chiều dài điện thoại
+        const textPixelWidth = metrics.width || 900;
+        const scale = Math.min(1.0, (this.landscapeWidth * 0.90) / textPixelWidth);
 
-        const step = 4;
-        for (let y = 0; y < offCanvas.height; y += step) {
-            for (let x = 0; x < offCanvas.width; x += step) {
-                const idx = (y * offCanvas.width + x) * 4;
+        // 2. Quét điểm ảnh trích xuất thành hàng ngàn hạt bụi sao
+        const step = 3;
+        for (let y = 0; y < off.height; y += step) {
+            for (let x = 0; x < off.width; x += step) {
+                const idx = (y * off.width + x) * 4;
                 if (imgData[idx] > 50) {
                     this.particles.push({
-                        offsetX: (x - offCanvas.width / 2) * this.scale,
-                        offsetY: (y - offCanvas.height / 2) * this.scale,
-                        baseSize: 1.8 + Math.random() * 1.6,
+                        offsetX: (x - off.width / 2) * scale,
+                        offsetY: (y - off.height / 2) * scale,
+                        baseSize: 1.5 + Math.random() * 1.5,
                         phase: Math.random() * Math.PI * 2
                     });
                 }
@@ -322,52 +327,57 @@ class LockScreenParticleText {
     }
 
     animate() {
-        // Chỉ vẽ khi màn hình dạng Dọc (Portrait)
+        // Chỉ vẽ khi đang ở màn hình dọc
         if (window.innerWidth <= window.innerHeight || window.innerWidth < 900) {
-            this.ctx.clearRect(0, 0, this.width, this.height);
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            // Chữ trôi từ dưới lên trên
+            this.ctx.save();
+
+            // ==========================================================
+            // MA TRẬN XOAY CHUẨN XÁC: ĐẶT TÂM CHÍNH GIỮA MÀN HÌNH VÀ XOAY 90 ĐỘ
+            // ==========================================================
+            this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+            this.ctx.rotate(-Math.PI / 2); // Xoay 90 độ ngược chiều kim đồng hồ theo UI Ngang
+
+            // Chữ trôi từ mép dưới lên mép trên của UI Ngang
             this.textY -= this.speed;
-            if (this.textY < -60) {
-                this.textY = this.height + 40;
+            const limit = this.landscapeHeight / 2 + 50;
+            if (this.textY < -limit) {
+                this.textY = limit; // Vòng lại mép dưới
             }
 
-            const centerX = this.width / 2;
             const now = performance.now() * 0.001;
 
-            // 1. VẼ THÂN CHỮ PHÁT QUANG RÕ RÀNG (ĐẢM BẢO NHÌN THẤY NGAY 100%)
-            const fontSize = Math.max(13, Math.min(22, Math.floor(this.width * 0.055)));
-            this.ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+            // 1. VẼ THÂN CHỮ MỜ ĐỂ LUÔN THẤY RÕ NỘI DUNG
+            const displayFontSize = Math.max(14, Math.floor(this.landscapeWidth * 0.035));
+            this.ctx.font = `bold ${displayFontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
-            this.ctx.fillStyle = 'rgba(255, 105, 180, 0.45)';
-            this.ctx.shadowColor = '#ff5c9e';
-            this.ctx.shadowBlur = 12;
-            this.ctx.fillText(this.text, centerX, this.textY);
+            this.ctx.fillStyle = 'rgba(255, 92, 158, 0.35)';
+            this.ctx.fillText(this.text, 0, this.textY);
 
-            // 2. VẼ HÀNG NGHÌN HẠT BỤI SAO LẤP LÁNH ĐÍNH TRÊN TỪNG NÉT CHỮ
+            // 2. VẼ HÀNG NGÀN HẠT BỤI SAO LẤP LÁNH ĐÍNH TRÊN TỪNG NÉT CHỮ
             for (let i = 0; i < this.particles.length; i++) {
                 const p = this.particles[i];
-                const px = centerX + p.offsetX;
+                const px = p.offsetX;
                 const py = this.textY + p.offsetY;
 
-                const twinkle = Math.sin(now * 4.5 + p.phase) * 0.35;
-                const alpha = Math.max(0.4, Math.min(1.0, 0.80 + twinkle));
-                const size = p.baseSize * (0.9 + twinkle * 0.3);
+                const twinkle = Math.sin(now * 4.0 + p.phase) * 0.35;
+                const alpha = Math.max(0.35, Math.min(1.0, 0.78 + twinkle));
+                const size = p.baseSize * (0.85 + twinkle * 0.28);
 
-                this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-                this.ctx.shadowColor = '#ff5c9e';
-                this.ctx.shadowBlur = 6;
-
+                this.ctx.fillStyle = `rgba(255, 105, 180, ${alpha})`;
                 this.ctx.beginPath();
                 this.ctx.arc(px, py, size, 0, Math.PI * 2);
                 this.ctx.fill();
             }
+
+            this.ctx.restore();
         }
 
         requestAnimationFrame(() => this.animate());
     }
 }
 
-// KHỞI CHẠY NGAY
-new LockScreenParticleText("✨ Úm ba la xì bùa, lật ngang điện thoại dính bùa dễ thương! 🪄❤️ ");
+// KHỞI CHẠY TRỰC TIẾP
+new LockScreenLandscapeParticles("✨ Úm ba la xì bùa, lật ngang điện thoại dính bùa dễ thương! 🪄❤️");

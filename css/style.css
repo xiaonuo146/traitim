@@ -20,7 +20,7 @@ html {
 }
 
 /* ==========================================================
-   1. MÀN HÌNH KHÓA XOAY NGANG 
+   1. MÀN HÌNH KHÓA XOAY NGANG (NỀN ĐEN UI DỌC CHỨA CANVAS)
 ========================================================== */
 #rotate-lock-screen {
     display: none;
@@ -36,17 +36,18 @@ screen and (max-width: 900px) and (orientation: portrait) {
         width: 100vw;
         height: 100dvh;
         z-index: 999999;
-        background: radial-gradient(circle, #1a0b16 0%, #07080d 100%);
+        background: #07080d;
+        /* Màn hình đen huyền bí */
         overflow: hidden;
     }
 
     #lock-canvas {
-        position: fixed !important;
+        position: absolute !important;
         top: 0 !important;
         left: 0 !important;
         width: 100vw !important;
         height: 100dvh !important;
-        z-index: 10;
+        display: block !important;
         pointer-events: none;
     }
 }

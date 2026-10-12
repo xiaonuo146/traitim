@@ -8,25 +8,30 @@
   <title>3D Romantic Heart</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <!-- BỔ SUNG THREE/ADDONS ĐỂ KHÔNG BỊ SẬP CODE JS -->
   <script type="importmap">
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-        }
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
       }
-    </script>
+    }
+  </script>
 </head>
 
 <body>
+  <!-- MÀN HÌNH KHÓA: CANVAS VẼ CHỮ HẠT CHUẨN UI NGANG -->
   <div id="rotate-lock-screen">
     <canvas id="lock-canvas"></canvas>
   </div>
+
   <!-- 1. Màn hình mở quà -->
   <div id="start-screen">
     <button id="start-btn">✨ Nhanh tay click cậu ơi ✨</button>
   </div>
 
-  <!-- 2. Video Intro (Bổ sung webkit-playsinline cho iPhone) -->
+  <!-- 2. Video Intro -->
   <div id="video-container" class="hidden">
     <video id="intro-video" muted playsinline webkit-playsinline preload="auto">
       <source src="./assets/intro.mp4" type="video/mp4">
@@ -54,7 +59,5 @@
 
   <script type="module" src="js/main.js"></script>
 </body>
-
-
 
 </html>
