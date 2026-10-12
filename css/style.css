@@ -20,14 +20,12 @@ html {
 }
 
 /* ==========================================================
-   1. MÀN HÌNH KHÓA XOAY NGANG (CHỈ KÍCH HOẠT KHI DÙNG ĐIỆN THOẠI CẦM DỌC)
+   1. MÀN HÌNH KHÓA XOAY NGANG TRÊN ĐIỆN THOẠI (CHỮ PHÁT QUANG LẤP LÁNH)
 ========================================================== */
 #rotate-lock-screen {
     display: none;
-    /* Mặc định ẩn trên máy tính */
 }
 
-/* Nhận diện điện thoại / máy tính bảng có màn hình cảm ứng đang cầm dọc */
 @media screen and (pointer: coarse) and (orientation: portrait),
 screen and (max-width: 900px) and (orientation: portrait) {
     #rotate-lock-screen {
@@ -41,39 +39,94 @@ screen and (max-width: 900px) and (orientation: portrait) {
         background: radial-gradient(circle, #1a0b16 0%, #07080d 100%);
         justify-content: center;
         align-items: center;
-        text-align: center;
-        padding: 30px;
+        overflow: hidden;
     }
 
     .rotate-box {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 15px;
+        width: 100%;
+        gap: 25px;
     }
 
     .phone-rotate-icon {
-        font-size: 54px;
+        font-size: 58px;
+        filter: drop-shadow(0 0 20px rgba(255, 92, 158, 0.8));
         animation: rotatePhoneAnim 2.2s infinite ease-in-out;
     }
 
-    #rotate-lock-screen h2 {
-        color: #ff5c9e;
-        font-size: 26px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-weight: 600;
-        margin: 0;
+    /* Khung che chữ chạy */
+    .marquee-container {
+        width: 100vw;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 15px 0;
+        background: linear-gradient(90deg,
+                rgba(255, 92, 158, 0) 0%,
+                rgba(255, 92, 158, 0.08) 20%,
+                rgba(255, 92, 158, 0.08) 80%,
+                rgba(255, 92, 158, 0) 100%);
     }
 
-    #rotate-lock-screen p {
-        color: rgba(255, 255, 255, 0.75);
-        font-size: 16px;
+    /* Băng chuyền chạy liên tục từ phải sang trái */
+    .marquee-track {
+        display: inline-flex;
+        animation: marqueeScroll 12s linear infinite;
+    }
+
+    /* CHỮ PHÁT QUANG VÀ HIỆU ỨNG LẤP LÁNH */
+    .sparkle-text {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        margin: 0;
+        font-size: 19px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: #ffffff;
+        padding-right: 60px;
+
+        /* PHÁT QUANG ĐA TẦNG (HỒNG NEON + TRẮNG SÁNG) */
+        text-shadow:
+            0 0 6px #ffffff,
+            0 0 12px #ff5c9e,
+            0 0 25px #ff4081,
+            0 0 45px #ff1493,
+            0 0 70px #ff1493;
+
+        /* HOẠT ẢNH LẤP LÁNH NHẤP NHÁY (SPARKLE TWINKLE) */
+        animation: sparkleShimmer 1.8s infinite alternate ease-in-out;
     }
 }
 
-/* Hiệu ứng hoạt họa xoay điện thoại 90 độ */
+/* Hoạt ảnh chữ chạy liên tục từ phải qua trái */
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Hoạt ảnh lấp lánh (Tỏa sáng bừng lên rồi dịu lại như ánh sao) */
+@keyframes sparkleShimmer {
+    0% {
+        opacity: 0.85;
+        filter: drop-shadow(0 0 8px rgba(255, 92, 158, 0.6)) brightness(1);
+    }
+
+    50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1)) drop-shadow(0 0 35px rgba(255, 64, 129, 0.9)) brightness(1.25);
+    }
+
+    100% {
+        opacity: 0.9;
+        filter: drop-shadow(0 0 12px rgba(255, 92, 158, 0.8)) brightness(1.05);
+    }
+}
+
+/* Hoạt ảnh xoay điện thoại 90 độ */
 @keyframes rotatePhoneAnim {
 
     0%,
