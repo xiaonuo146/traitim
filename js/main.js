@@ -19,6 +19,9 @@ class Application {
         this.controls = document.getElementById('controls');
         this.toggleMusicBtn = document.getElementById('toggle-music-btn');
         this.toggleAnimBtn = document.getElementById('toggle-anim-btn');
+        this.exitBtn = document.getElementById('exit-btn');
+        this.exitScreen = document.getElementById('exit-screen');
+        this.replayBtn = document.getElementById('replay-btn');
 
         this.renderer = null;
         this.scene = null;
@@ -101,6 +104,47 @@ class Application {
             this.isPaused = !this.isPaused;
             this.toggleAnimBtn.textContent = this.isPaused ? '▶️' : '⏸️';
         });
+        // ==========================================================
+        // NÚT THOÁT TẤT CẢ CHƯƠNG TRÌNH (DỪNG MỌI THỨ)
+        // ==========================================================
+        if (this.exitBtn) {
+            this.exitBtn.addEventListener('click', () => {
+                // 1. Dừng ngay lập tức toàn bộ âm thanh
+                if (this.musicClip) {
+                    this.musicClip.pause();
+                    this.musicClip.currentTime = 0;
+                }
+                if (this.musicHeart) {
+                    this.musicHeart.pause();
+                    this.musicHeart.currentTime = 0;
+                }
+
+                // 2. Dừng video nếu đang phát
+                if (this.introVideo) {
+                    this.introVideo.pause();
+                }
+
+                // 3. Đóng băng toàn bộ hoạt cảnh 3D
+                this.is3DStarted = false;
+                this.isPaused = true;
+
+                // 4. Ẩn canvas và cụm điều khiển
+                this.canvas.classList.remove('visible');
+                this.controls.classList.add('hidden');
+
+                // 5. Hiện màn hình tạm biệt
+                if (this.exitScreen) {
+                    this.exitScreen.classList.remove('hidden');
+                }
+            });
+        }
+
+        // NÚT XEM LẠI TỪ ĐẦU
+        if (this.replayBtn) {
+            this.replayBtn.addEventListener('click', () => {
+                window.location.reload(); // Tải lại trang để bắt đầu lại từ đầu
+            });
+        }
     }
 
     transitionTo3DScene() {

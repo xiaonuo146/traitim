@@ -48,13 +48,23 @@
     <source src="./assets/music2.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- 4. Nút điều khiển -->
+  <!-- 4. Cụm nút điều khiển: Thêm nút Thoát 🚪 -->
   <div id="controls" class="hidden">
     <button id="toggle-music-btn" title="Bật/Tắt nhạc">🔊</button>
     <button id="toggle-anim-btn" title="Dừng/Tiếp tục">⏸️</button>
+    <button id="exit-btn" title="Thoát chương trình">🚪</button>
   </div>
 
-  <!-- 5. Canvas 3D -->
+  <!-- 5. Màn hình tạm biệt khi thoát -->
+  <div id="exit-screen" class="hidden">
+    <div class="exit-box">
+      <h2>Hẹn gặp lại cậu nhé! ❤️</h2>
+      <p>Cảm ơn cậu đã ghé thăm và theo dõi ✨</p>
+      <button id="replay-btn">Xem lại từ đầu 🔄</button>
+    </div>
+  </div>
+
+  <!-- 6. Canvas 3D -->
   <canvas id="canvas"></canvas>
 
   <script type="module" src="js/main.js"></script>
