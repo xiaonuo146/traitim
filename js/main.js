@@ -173,16 +173,17 @@ class Application {
         const aspect = width / height;
         const baseZ = CONFIG.CAMERA.BASE_Z;
 
-        // THUẬT TOÁN TỰ ĐỘNG CÂN CHỈNH KHOẢNG CÁCH CAMERA CHO ĐIỆN THOẠI:
-        // Màn hình dọc (aspect < 1): Tự động lùi camera ra xa tỉ lệ nghịch với chiều ngang
+        // 1. Màn hình dọc (Cầm máy đứng): Lùi xa để không bị tràn viền 2 bên
         if (aspect < 1) {
-            // Điện thoại tỷ lệ 9:16 hoặc 9:19.5 (iPhone, Samsung...)
             this.baseCameraZ = Math.max(baseZ, (baseZ * 0.62) / aspect);
-        } else if (aspect < 1.4) {
-            // Máy tính bảng (iPad)
-            this.baseCameraZ = baseZ * (1.3 / aspect);
-        } else {
-            // Máy tính để bàn
+        }
+        // 2. Màn hình ngang điện thoại (Xoay ngang máy, chiều cao ngắn):
+        // Lùi nhẹ camera để thấy trọn vẹn cả đĩa đáy và đỉnh tim
+        else if (height < 500) {
+            this.baseCameraZ = baseZ * 1.08;
+        }
+        // 3. Màn hình máy tính / iPad
+        else {
             this.baseCameraZ = baseZ;
         }
 
