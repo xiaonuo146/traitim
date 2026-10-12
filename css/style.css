@@ -10,18 +10,90 @@ html {
     width: 100%;
     height: 100%;
     height: 100dvh;
-    /* Chiều cao chuẩn xác trên điện thoại có thanh địa chỉ Safari/Chrome */
     overflow: hidden;
     background-color: #0B0C10;
     font-family: 'Great Vibes', cursive, sans-serif;
     user-select: none;
     -webkit-user-select: none;
     touch-action: none;
-    /* Khóa kéo trượt trang trên điện thoại */
     overscroll-behavior: none;
-    /* Chống hiệu ứng giật nảy trang của iPhone */
 }
 
+/* ==========================================================
+   1. MÀN HÌNH KHÓA XOAY NGANG (CHỈ KÍCH HOẠT KHI DÙNG ĐIỆN THOẠI CẦM DỌC)
+========================================================== */
+#rotate-lock-screen {
+    display: none;
+    /* Mặc định ẩn trên máy tính */
+}
+
+/* Nhận diện điện thoại / máy tính bảng có màn hình cảm ứng đang cầm dọc */
+@media screen and (pointer: coarse) and (orientation: portrait),
+screen and (max-width: 900px) and (orientation: portrait) {
+    #rotate-lock-screen {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        z-index: 999999;
+        background: radial-gradient(circle, #1a0b16 0%, #07080d 100%);
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 30px;
+    }
+
+    .rotate-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .phone-rotate-icon {
+        font-size: 54px;
+        animation: rotatePhoneAnim 2.2s infinite ease-in-out;
+    }
+
+    #rotate-lock-screen h2 {
+        color: #ff5c9e;
+        font-size: 26px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    #rotate-lock-screen p {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 16px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        margin: 0;
+    }
+}
+
+/* Hiệu ứng hoạt họa xoay điện thoại 90 độ */
+@keyframes rotatePhoneAnim {
+
+    0%,
+    20% {
+        transform: rotate(0deg);
+    }
+
+    50%,
+    75% {
+        transform: rotate(-90deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* ==========================================================
+   2. UI NGANG CHUẨN (CHO MÁY TÍNH & ĐIỆN THOẠI XOAY NGANG)
+========================================================== */
 canvas {
     position: fixed;
     top: 0;
@@ -38,7 +110,7 @@ canvas.visible {
     opacity: 1;
 }
 
-/* 1. Màn hình mở quà ban đầu */
+/* Màn hình mở quà */
 #start-screen {
     position: fixed;
     top: 0;
@@ -50,12 +122,11 @@ canvas.visible {
     justify-content: center;
     align-items: center;
     background: radial-gradient(circle, #1a0b16 0%, #07080d 100%);
-    padding: 20px;
 }
 
 #start-btn {
-    padding: 16px 36px;
-    font-size: 26px;
+    padding: 14px 34px;
+    font-size: 24px;
     color: #fff;
     background: linear-gradient(135deg, #ff5c9e, #ff85ba);
     border: none;
@@ -64,14 +135,13 @@ canvas.visible {
     box-shadow: 0 0 30px rgba(255, 92, 158, 0.6);
     font-family: inherit;
     transition: transform 0.25s, box-shadow 0.25s;
-    max-width: 90vw;
 }
 
 #start-btn:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
 }
 
-/* 2. Khung Video Intro */
+/* Khung video tràn viền chuẩn rạp phim */
 #video-container {
     position: fixed;
     top: 0;
@@ -87,50 +157,49 @@ canvas.visible {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Tràn viền toàn màn hình điện thoại */
 }
 
-/* 3. Nút Bỏ qua (Né tai thỏ iPhone) */
+/* Nút Bỏ qua né góc viền màn hình ngang */
 #skip-btn {
     position: absolute;
-    top: max(20px, env(safe-area-inset-top, 20px));
-    right: max(20px, env(safe-area-inset-right, 20px));
-    padding: 10px 22px;
-    font-size: 15px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    top: max(15px, env(safe-area-inset-top));
+    right: max(20px, env(safe-area-inset-right));
+    padding: 8px 18px;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: rgba(255, 255, 255, 0.9);
     background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 30px;
+    border-radius: 20px;
     cursor: pointer;
 }
 
 #skip-btn:active {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.35);
 }
 
-/* 4. Cụm nút điều khiển trên màn hình 3D (Né tai thỏ iPhone) */
+/* Cụm nút điều khiển né góc viền màn hình ngang */
 #controls {
     position: fixed;
-    top: max(20px, env(safe-area-inset-top, 20px));
-    left: max(20px, env(safe-area-inset-left, 20px));
+    top: max(15px, env(safe-area-inset-top));
+    left: max(20px, env(safe-area-inset-left));
     z-index: 50;
     display: flex;
-    gap: 12px;
+    gap: 10px;
 }
 
 #controls button {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: #fff;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -146,31 +215,4 @@ canvas.visible {
 .hidden {
     opacity: 0;
     pointer-events: none;
-}
-
-/* TỐI ƯU KHI XOAY NGANG ĐIỆN THOẠI (LANDSCAPE) */
-@media screen and (orientation: landscape) and (max-height: 500px) {
-    #start-btn {
-        padding: 12px 28px;
-        font-size: 20px;
-    }
-
-    #controls {
-        top: max(12px, env(safe-area-inset-top));
-        left: max(15px, env(safe-area-inset-left));
-        gap: 8px;
-    }
-
-    #controls button {
-        width: 38px;
-        height: 38px;
-        font-size: 15px;
-    }
-
-    #skip-btn {
-        top: max(12px, env(safe-area-inset-top));
-        right: max(15px, env(safe-area-inset-right));
-        padding: 6px 16px;
-        font-size: 13px;
-    }
 }

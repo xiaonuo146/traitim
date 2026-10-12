@@ -168,22 +168,14 @@ class Application {
     }
 
     updateCameraDistance() {
-        const width = window.innerWidth;
         const height = window.innerHeight;
-        const aspect = width / height;
         const baseZ = CONFIG.CAMERA.BASE_Z;
 
-        // 1. Màn hình dọc (Cầm máy đứng): Lùi xa để không bị tràn viền 2 bên
-        if (aspect < 1) {
-            this.baseCameraZ = Math.max(baseZ, (baseZ * 0.62) / aspect);
-        }
-        // 2. Màn hình ngang điện thoại (Xoay ngang máy, chiều cao ngắn):
-        // Lùi nhẹ camera để thấy trọn vẹn cả đĩa đáy và đỉnh tim
-        else if (height < 500) {
-            this.baseCameraZ = baseZ * 1.08;
-        }
-        // 3. Màn hình máy tính / iPad
-        else {
+        // Khi xoay ngang điện thoại (chiều cao hẹp < 500px)
+        if (height < 500) {
+            this.baseCameraZ = baseZ * 1.05;
+        } else {
+            // Màn hình máy tính / iPad
             this.baseCameraZ = baseZ;
         }
 
