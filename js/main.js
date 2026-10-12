@@ -239,3 +239,129 @@ class Application {
 window.addEventListener('DOMContentLoaded', () => {
     new Application();
 });
+// ==========================================================
+// BỘ VẼ CHỮ GHÉP TỪ CÁC HẠT LẤP LÁNH BAY TỪ DƯỚI LÊN TRÊN
+// ==========================================================
+class LockScreenParticleText {
+    constructor() {
+        this.canvas = document.getElementById('lock-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.textY = 0;
+        this.speed = 0.9; // Tốc độ trôi từ dưới lên trên
+        this.isRunning = false;
+
+        this.init();
+    }
+
+    init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.sampleTextParticles();
+        this.start();
+    }
+
+    resize() {
+        if (!this.canvas) return;
+        this.width = this.canvas.width = window.innerWidth;
+        this.height = this.canvas.height = window.innerHeight;
+        this.textY = this.height + 60; // Bắt đầu ở dưới đáy màn hình
+        this.sampleTextParticles();
+    }
+
+    sampleTextParticles() {
+        if (this.width === 0 || this.height === 0) return;
+
+        // Canvas phụ để trích xuất điểm ảnh của chữ
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = this.width;
+        offCanvas.height = 140;
+        const offCtx = offCanvas.getContext('2d');
+
+        offCtx.fillStyle = '#000';
+        offCtx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+
+        // 1 HÀNG DUY NHẤT, CHỮ TO RÕ RÀNG
+        const fontSize = Math.min(32, Math.floor(this.width * 0.075));
+        offCtx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+        offCtx.fillStyle = '#fff';
+        offCtx.textAlign = 'center';
+        offCtx.textBaseline = 'middle';
+        offCtx.fillText('✨ Xoay Ngang Điện Thoại ❤️ ✨', offCanvas.width / 2, offCanvas.height / 2);
+
+        const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height).data;
+        this.particles = [];
+
+        // Khoảng cách lấy hạt (step = 3 để hạt dày đặc, sắc nét)
+        const step = 3;
+        for (let y = 0; y < offCanvas.height; y += step) {
+            for (let x = 0; x < offCanvas.width; x += step) {
+                const idx = (y * offCanvas.width + x) * 4;
+                if (imgData[idx] > 128) {
+                    this.particles.push({
+                        offsetX: x - offCanvas.width / 2,
+                        offsetY: y - offCanvas.height / 2,
+                        baseSize: 1.2 + Math.random() * 1.6, // Hạt nhỏ li ti
+                        twinklePhase: Math.random() * Math.PI * 2,
+                        twinkleSpeed: 0.04 + Math.random() * 0.06
+                    });
+                }
+            }
+        }
+    }
+
+    start() {
+        if (this.isRunning) return;
+        this.isRunning = true;
+        this.animate();
+    }
+
+    animate() {
+        if (!this.isRunning) return;
+
+        // Nếu điện thoại đã xoay ngang -> Tạm dừng vẽ để tiết kiệm pin
+        if (window.innerWidth > window.innerHeight) {
+            requestAnimationFrame(() => this.animate());
+            return;
+        }
+
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // Dòng chữ di chuyển từ dưới lên trên
+        this.textY -= this.speed;
+        if (this.textY < -80) {
+            this.textY = this.height + 60; // Bay hết lên trên thì vòng lại đáy
+        }
+
+        const centerX = this.width / 2;
+        const now = performance.now() * 0.001;
+
+        for (let i = 0; i < this.particles.length; i++) {
+            const p = this.particles[i];
+            const px = centerX + p.offsetX;
+            const py = this.textY + p.offsetY;
+
+            // Hiệu ứng lấp lánh độc lập cho từng hạt nhỏ
+            const twinkle = Math.sin(now * 3.5 + p.twinklePhase) * 0.35;
+            const alpha = Math.max(0.35, Math.min(1.0, 0.70 + twinkle));
+            const size = p.baseSize * (0.85 + twinkle * 0.3);
+
+            // Vẽ hạt phát quang hồng baby neon
+            this.ctx.fillStyle = `rgba(255, 105, 180, ${alpha})`;
+            this.ctx.shadowColor = '#ff5c9e';
+            this.ctx.shadowBlur = 6;
+
+            this.ctx.beginPath();
+            this.ctx.arc(px, py, size, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Khởi chạy chữ hạt lấp lánh khi mở web
+window.addEventListener('DOMContentLoaded', () => {
+    new LockScreenParticleText();
+});

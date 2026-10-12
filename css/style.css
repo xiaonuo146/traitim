@@ -20,7 +20,7 @@ html {
 }
 
 /* ==========================================================
-   1. MÀN HÌNH KHÓA XOAY NGANG TRÊN ĐIỆN THOẠI (CHỮ PHÁT QUANG LẤP LÁNH)
+   1. MÀN HÌNH KHÓA XOAY NGANG (CHỮ HẠT LẤP LÁNH BAY TỪ DƯỚI LÊN)
 ========================================================== */
 #rotate-lock-screen {
     display: none;
@@ -42,87 +42,23 @@ screen and (max-width: 900px) and (orientation: portrait) {
         overflow: hidden;
     }
 
-    .rotate-box {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 25px;
-    }
-
     .phone-rotate-icon {
-        font-size: 58px;
-        filter: drop-shadow(0 0 20px rgba(255, 92, 158, 0.8));
+        font-size: 64px;
+        filter: drop-shadow(0 0 25px rgba(255, 92, 158, 0.85));
         animation: rotatePhoneAnim 2.2s infinite ease-in-out;
+        z-index: 2;
+        pointer-events: none;
     }
 
-    /* Khung che chữ chạy */
-    .marquee-container {
-        width: 100vw;
-        overflow: hidden;
-        white-space: nowrap;
-        padding: 15px 0;
-        background: linear-gradient(90deg,
-                rgba(255, 92, 158, 0) 0%,
-                rgba(255, 92, 158, 0.08) 20%,
-                rgba(255, 92, 158, 0.08) 80%,
-                rgba(255, 92, 158, 0) 100%);
-    }
-
-    /* Băng chuyền chạy liên tục từ phải sang trái */
-    .marquee-track {
-        display: inline-flex;
-        animation: marqueeScroll 12s linear infinite;
-    }
-
-    /* CHỮ PHÁT QUANG VÀ HIỆU ỨNG LẤP LÁNH */
-    .sparkle-text {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 19px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        color: #ffffff;
-        padding-right: 60px;
-
-        /* PHÁT QUANG ĐA TẦNG (HỒNG NEON + TRẮNG SÁNG) */
-        text-shadow:
-            0 0 6px #ffffff,
-            0 0 12px #ff5c9e,
-            0 0 25px #ff4081,
-            0 0 45px #ff1493,
-            0 0 70px #ff1493;
-
-        /* HOẠT ẢNH LẤP LÁNH NHẤP NHÁY (SPARKLE TWINKLE) */
-        animation: sparkleShimmer 1.8s infinite alternate ease-in-out;
-    }
-}
-
-/* Hoạt ảnh chữ chạy liên tục từ phải qua trái */
-@keyframes marqueeScroll {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-50%);
-    }
-}
-
-/* Hoạt ảnh lấp lánh (Tỏa sáng bừng lên rồi dịu lại như ánh sao) */
-@keyframes sparkleShimmer {
-    0% {
-        opacity: 0.85;
-        filter: drop-shadow(0 0 8px rgba(255, 92, 158, 0.6)) brightness(1);
-    }
-
-    50% {
-        opacity: 1;
-        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1)) drop-shadow(0 0 35px rgba(255, 64, 129, 0.9)) brightness(1.25);
-    }
-
-    100% {
-        opacity: 0.9;
-        filter: drop-shadow(0 0 12px rgba(255, 92, 158, 0.8)) brightness(1.05);
+    /* Canvas vẽ các hạt chữ lấp lánh bay từ dưới lên */
+    #lock-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
     }
 }
 
